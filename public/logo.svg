@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#F8FAFC"/>
+  <rect x="156" y="88" width="200" height="336" rx="24" fill="url(#docGrad)"/>
+  <rect x="156" y="88" width="200" height="336" rx="24" fill="none" stroke="#4338CA" stroke-width="2" opacity="0.3"/>
+  <path d="M188 152 L324 152" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+  <path d="M188 192 L324 192" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+  <path d="M188 232 L276 232" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity="0.4"/>
+  <path d="M300 96 L224 280 L268 280 L240 416 L356 216 L300 216 L340 96 Z" fill="url(#boltGrad)" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M300 96 L224 280 L268 280 L240 416 L356 216 L300 216 L340 96 Z" fill="#0EA5E9" opacity="0.2"/>
+  <circle cx="372" cy="372" r="48" fill="#0D9488"/>
+  <path d="M356 372 L368 384 L390 360" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
