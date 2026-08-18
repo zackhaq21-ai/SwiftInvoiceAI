@@ -23,6 +23,8 @@ npm run pre-deploy
 
 ## Deployment
 
+The `main` branch deploys automatically to Vercel using the project environment variables.
+
 See `DEPLOYMENT.md`, `MOBILE_SETUP.md`, and `PRODUCTION_READINESS_REPORT.md`.
 
 Keep Stripe, Resend, Supabase service-role, webhook, and cron secrets in the deployment provider or Supabase Edge Function secrets. Never commit them to Git.
