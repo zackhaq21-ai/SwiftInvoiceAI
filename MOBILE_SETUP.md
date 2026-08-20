@@ -6,7 +6,7 @@ The web app builds into native iOS and Android wrappers that can be submitted to
 ## What's already done
 
 - Capacitor core + plugins installed (`@capacitor/core`, `@capacitor/app`, `@capacitor/browser`, `@capacitor/status-bar`, `@capacitor/splash-screen`, `@capacitor/keyboard`, `@capacitor/preferences`, `@capacitor/ios`, `@capacitor/android`)
-- `capacitor.config.ts` configured with app ID `com.swiftinvoiceai.app`, splash screen, status bar, and keyboard settings
+- `capacitor.config.ts` configured with app ID `com.crewbillai.app`, splash screen, status bar, and keyboard settings
 - Vite `base: './'` so assets load from the bundled WebView (not a dev server origin)
 - Safe-area insets added to CSS (`env(safe-area-inset-*)`) so content isn't hidden behind notches or home indicators
 - Stripe Checkout now opens in the system browser via `@capacitor/browser` (required for Stripe redirects to work on mobile)
@@ -43,11 +43,11 @@ npx cap open ios
 
 ### 3. Configure signing in Xcode
 - Click the project root in the file navigator
-- Select the "SwiftInvoiceAI" target
+- Select the "Crewbill" target
 - Under **Signing & Capabilities**:
   - Check "Automatically manage signing"
   - Select your Team (Apple Developer account)
-  - Xcode will generate the Bundle Identifier automatically (it should be `com.swiftinvoiceai.app`)
+  - Xcode will generate the Bundle Identifier automatically (it should be `com.crewbillai.app`)
 - If you need push notifications or other capabilities, add them here
 
 ### 4. Set app icon and splash screen
@@ -58,7 +58,7 @@ npx cap open ios
 ### 5. Configure App Store metadata
 In [App Store Connect](https://appstoreconnect.apple.com):
 - Create a new App
-- Bundle ID: `com.swiftinvoiceai.app`
+- Bundle ID: `com.crewbillai.app`
 - Set app name, description, keywords, screenshots, etc.
 
 ### 6. Build and archive
@@ -93,14 +93,14 @@ npx cap open android
 ### 4. Set application ID
 In `android/app/build.gradle`:
 ```gradle
-applicationId "com.swiftinvoiceai.app"
+applicationId "com.crewbillai.app"
 minSdkVersion 23   // Android 6.0+
 targetSdkVersion 34
 ```
 
 ### 5. Generate signing key
 ```bash
-keytool -genkey -v -keystore swiftinvoiceai-release.keystore -alias swiftinvoiceai -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -keystore crewbillai-release.keystore -alias crewbillai -keyalg RSA -keysize 2048 -validity 10000
 ```
 **Keep this keystore file safe** — you need the same key for all future updates.
 
@@ -109,9 +109,9 @@ In `android/app/build.gradle`, add inside `android { signingConfigs { ... } }`:
 ```gradle
 signingConfigs {
     release {
-        storeFile file('../swiftinvoiceai-release.keystore')
+        storeFile file('../crewbillai-release.keystore')
         storePassword 'your-store-password'
-        keyAlias 'swiftinvoiceai'
+        keyAlias 'crewbillai'
         keyPassword 'your-key-password'
     }
 }
@@ -132,7 +132,7 @@ This produces `app/build/outputs/bundle/release/app-release.aab` — the format 
 
 ### 8. Upload to Google Play
 - Go to [Play Console](https://play.google.com/console)
-- Create a new app → package name `com.swiftinvoiceai.app`
+- Create a new app → package name `com.crewbillai.app`
 - Under **Release → Production**, click **Create release**
 - Upload the `.aab` file
 - Fill in store listing (screenshots, description, etc.)
@@ -157,18 +157,18 @@ import { setWebBaseUrl } from '@/lib/mobile';
 await setWebBaseUrl('https://your-deployed-domain.com');
 ```
 
-You need a deployed web version of SwiftInvoiceAI (e.g., on Vercel, Netlify, or your own domain). After Stripe redirects there, the web version can deep-link back into the app if you set up a custom URL scheme.
+You need a deployed web version of Crewbill (e.g., on Vercel, Netlify, or your own domain). After Stripe redirects there, the web version can deep-link back into the app if you set up a custom URL scheme.
 
 ## Custom URL scheme (optional, for deep-linking back after payment)
 
 ### iOS
-In `capacitor.config.ts`, the scheme is already set to `capacitor`. To use a custom scheme like `swiftinvoiceai://`:
+In `capacitor.config.ts`, the scheme is already set to `capacitor`. To use a custom scheme like `crewbillai://`:
 1. In Xcode, go to your target → **Info** → **URL Types**
-2. Add URL scheme: `swiftinvoiceai`
+2. Add URL scheme: `crewbillai`
 3. Update `capacitor.config.ts`:
 ```ts
 server: {
-  iosScheme: 'swiftinvoiceai',
+  iosScheme: 'crewbillai',
 }
 ```
 
@@ -179,7 +179,7 @@ Add an intent filter in `android/app/src/main/AndroidManifest.xml`:
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="swiftinvoiceai" />
+    <data android:scheme="crewbillai" />
 </intent-filter>
 ```
 

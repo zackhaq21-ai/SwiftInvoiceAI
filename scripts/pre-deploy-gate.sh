@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Pre-Deploy Gate for Swift Invoice AI
+# Pre-Deploy Gate for Crewbill
 #
 # Runs typecheck, all tests, production build, and lint on changed files.
 # If ANY gate fails, the script exits non-zero and deployment must NOT proceed.
@@ -36,7 +36,7 @@ run_gate() {
 }
 
 echo -e "${BOLD}═══════════════════════════════════════════════════════════════${NC}"
-echo -e "${BOLD}  Swift Invoice AI — Pre-Deploy Gate${NC}"
+echo -e "${BOLD}  Crewbill — Pre-Deploy Gate${NC}"
 echo -e "${BOLD}═══════════════════════════════════════════════════════════════${NC}"
 
 # Gate 1: Typecheck
@@ -64,6 +64,6 @@ if [ "$GATES_FAILED" -gt 0 ]; then
 fi
 
 echo -e "\n${GREEN}✓ ALL GATES PASSED — safe to publish.${NC}"
-echo -e "${YELLOW}  Next: click 'Update' in Bolt's Publish menu to deploy to swiftinvoiceai.com${NC}"
+echo -e "${YELLOW}  Next: click 'Update' in Bolt's Publish menu to deploy to crewbillai.com${NC}"
 echo -e "${YELLOW}  Then run: npm run health-check${NC}"
 exit 0

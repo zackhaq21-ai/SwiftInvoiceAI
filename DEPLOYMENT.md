@@ -1,8 +1,8 @@
-# Deployment Guide — Swift Invoice AI
+# Deployment Guide — Crewbill
 
 ## Overview
 
-This document describes the deployment workflow for **swiftinvoiceai.com** using Bolt's built-in hosting.
+This document describes the deployment workflow for **crewbillai.com** using Bolt's built-in hosting.
 
 ### Important Limitation
 
@@ -40,7 +40,7 @@ The script exits with code `1` on any failure, making it suitable for CI pipelin
 Once all gates pass:
 
 1. Open the **Publish** menu in Bolt (top-right of the editor).
-2. Click **Update** to push your changes live to swiftinvoiceai.com.
+2. Click **Update** to push your changes live to crewbillai.com.
 3. Wait for the deployment to complete (Bolt shows a confirmation).
 
 > **Always use the Publish or Update button** in the Publish menu — these don't consume tokens. Prompting Bolt to publish via chat consumes tokens.
@@ -62,7 +62,7 @@ This script checks:
 
 To check a different URL:
 ```bash
-bash scripts/post-deploy-health-check.sh https://swiftinvoiceai.com
+bash scripts/post-deploy-health-check.sh https://crewbillai.com
 ```
 
 ---

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Post-Deploy Health Check for Swift Invoice AI
+# Post-Deploy Health Check for Crewbill
 #
 # After publishing to production, run this script to verify the site is
 # live and core public routes are responding.
@@ -10,10 +10,10 @@ set -euo pipefail
 # Usage: npm run health-check
 #        bash scripts/post-deploy-health-check.sh [URL]
 #
-# Defaults to https://swiftinvoiceai.com
+# Defaults to https://crewbillai.com
 # ──────────────────────────────────────────────────────────────────────────────
 
-BASE_URL="${1:-https://swiftinvoiceai.com}"
+BASE_URL="${1:-https://crewbillai.com}"
 # Remove trailing slash for consistent URL construction
 BASE_URL="${BASE_URL%/}"
 
@@ -66,7 +66,7 @@ check_route() {
 }
 
 echo -e "${BOLD}═══════════════════════════════════════════════════════════════${NC}"
-echo -e "${BOLD}  Swift Invoice AI — Post-Deploy Health Check${NC}"
+echo -e "${BOLD}  Crewbill — Post-Deploy Health Check${NC}"
 echo -e "${BOLD}  Target: ${BASE_URL}${NC}"
 echo -e "${BOLD}═══════════════════════════════════════════════════════════════${NC}"
 
@@ -88,7 +88,7 @@ fi
 # Check that the SPA shell loads (contains expected content markers)
 echo -e "\n  Checking SPA shell content..."
 homepage_body=$(curl -s --max-time 15 "$BASE_URL" 2>/dev/null || echo "")
-if echo "$homepage_body" | grep -q "Swift Invoice AI\|swiftinvoice\|invoice" 2>/dev/null; then
+if echo "$homepage_body" | grep -q "Crewbill\|crewbill\|invoice" 2>/dev/null; then
   echo -e "    ${GREEN}✓ Page content contains expected markers${NC}"
   CHECKS_PASSED=$((CHECKS_PASSED + 1))
 else

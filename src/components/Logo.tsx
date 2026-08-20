@@ -31,7 +31,7 @@ export function LogoWordmark({ className = 'h-8 w-auto', showTagline = false }: 
       <LogoMark className="h-9 w-9 flex-shrink-0" />
       <div className="leading-none">
         <span className="font-bold text-slate-900 text-[15px] tracking-tight block">
-          Swift Invoice <span style={{ color: '#4F46E5' }}>AI</span>
+          Crew<span style={{ color: '#4F46E5' }}>bill</span>
         </span>
         {showTagline && (
           <span className="text-[10px] text-slate-400 font-medium tracking-wide block mt-0.5">
@@ -74,7 +74,7 @@ export function LogoWordmarkDark({ className = 'h-8 w-auto', showTagline = false
       <LogoMarkDark className="h-9 w-9 flex-shrink-0" />
       <div className="leading-none">
         <span className="font-bold text-white text-[15px] tracking-tight block">
-          Swift Invoice <span style={{ color: '#818CF8' }}>AI</span>
+          Crew<span style={{ color: '#818CF8' }}>bill</span>
         </span>
         {showTagline && (
           <span className="text-[10px] text-slate-400 font-medium tracking-wide block mt-0.5">

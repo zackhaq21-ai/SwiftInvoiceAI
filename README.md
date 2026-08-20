@@ -1,8 +1,8 @@
-# Swift Invoice AI
+# Crewbill
 
 Invoice faster. Get paid sooner.
 
-Swift Invoice AI is an invoicing and estimates platform for freelancers, tradespeople, and small businesses. It includes customer management, voice-assisted invoice creation, payments, expenses, reporting, team collaboration, and subscription billing.
+Crewbill is an invoicing and estimates platform for freelancers, tradespeople, and small businesses. It includes customer management, voice-assisted invoice creation, payments, expenses, reporting, team collaboration, and subscription billing.
 
 ## Run locally
 

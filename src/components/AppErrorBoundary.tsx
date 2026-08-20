@@ -18,7 +18,7 @@ export default class AppErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('Swift Invoice screen error', error, info.componentStack);
+    console.error('Crewbill screen error', error, info.componentStack);
   }
 
   private reset = () => {

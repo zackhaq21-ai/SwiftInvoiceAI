@@ -20,9 +20,9 @@ function respond(body: unknown, status = 200) {
 }
 
 const PLAN_NAMES: Record<string, string> = {
-  pro: "Swift Invoice AI Pro",
-  business: "Swift Invoice AI Business",
-  enterprise: "Swift Invoice AI Enterprise",
+  pro: "Crewbill Pro",
+  business: "Crewbill Business",
+  enterprise: "Crewbill Enterprise",
 };
 
 const PLAN_AMOUNTS: Record<string, number> = {
@@ -360,7 +360,7 @@ Deno.serve(async (req: Request) => {
         }
       }
 
-      const origin = req.headers.get("origin") ?? "https://app.swiftinvoiceai.app";
+      const origin = req.headers.get("origin") ?? "https://app.crewbillai.app";
       const params = new URLSearchParams({
         mode: "subscription",
         customer: customerId!,

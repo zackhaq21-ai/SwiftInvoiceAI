@@ -168,7 +168,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             </span>
           </div>
           <p className="text-sm text-indigo-100/75">Welcome back</p>
-          <h1 className="mt-0.5 text-2xl font-extrabold tracking-tight truncate">{profile?.name || 'Swift Invoice AI'}</h1>
+          <h1 className="mt-0.5 text-2xl font-extrabold tracking-tight truncate">{profile?.name || 'Crewbill'}</h1>
           <p className="mt-2 max-w-[18rem] text-sm leading-relaxed text-slate-300">Turn today’s work into money in under a minute.</p>
           <button
             onClick={() => onNavigate({ name: 'editor' })}
