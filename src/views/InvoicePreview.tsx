@@ -12,6 +12,7 @@ import { supabase } from '@/lib/supabase';
 import { getIndustryTemplate } from '@/lib/industryTemplates';
 import { extractFunctionErrorMessage } from '@/lib/edgeFunctionError';
 import UpgradeModal from '@/views/UpgradeModal';
+import DeliveryTimeline from '@/components/DeliveryTimeline';
 import type { InvoiceStatus, PaymentMethod } from '@/lib/types';
 import type { View } from '@/App';
 
@@ -566,6 +567,14 @@ export default function InvoicePreview({ invoiceId, onNavigate }: InvoicePreview
             </p>
           </div>
         </div>
+
+        {/* Delivery & open status — not printable */}
+        {!isEstimate && (
+          <div className="no-print mt-6 card p-6">
+            <h2 className="font-semibold text-slate-900 mb-4">Delivery status</h2>
+            <DeliveryTimeline invoice={invoice} />
+          </div>
+        )}
 
         {/* Partial Payments panel — not printable */}
         {!isEstimate && (

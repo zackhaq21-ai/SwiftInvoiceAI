@@ -148,6 +148,7 @@ export interface Product {
   unit_price: number;
   tax_rate: number | null;
   is_active: boolean;
+  image_url: string | null;
   created_at: string;
   updated_at: string;
 }

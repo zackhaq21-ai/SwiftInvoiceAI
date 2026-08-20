@@ -6,6 +6,7 @@ import {
 import { useProducts } from '@/lib/hooks';
 import { useBusinessProfile } from '@/lib/hooks';
 import { formatCurrency } from '@/lib/format';
+import ProductImageUpload from '@/components/ProductImageUpload';
 import type { Product, ItemType } from '@/lib/types';
 import type { View } from '@/App';
 
@@ -25,6 +26,7 @@ const UNITS = ['ea', 'hr', 'day', 'sq ft', 'ft', 'lb', 'box', 'lot', 'set', 'kg'
 const emptyForm = {
   name: '', description: '', item_type: 'service' as ItemType,
   category: '', sku: '', unit: 'ea', unit_price: 0, tax_rate: '' as string | number, is_active: true,
+  image_url: '',
 };
 
 export default function Products({ onNavigate }: ProductsProps) {
@@ -70,6 +72,7 @@ export default function Products({ onNavigate }: ProductsProps) {
       unit_price: product.unit_price,
       tax_rate: product.tax_rate ?? '',
       is_active: product.is_active,
+      image_url: product.image_url || '',
     });
     setEditing(product);
     setShowForm(true);
@@ -87,6 +90,7 @@ export default function Products({ onNavigate }: ProductsProps) {
       unit_price: Number(form.unit_price) || 0,
       tax_rate: form.tax_rate === '' ? null : Number(form.tax_rate),
       is_active: form.is_active,
+      image_url: form.image_url || null,
     };
     if (editing) {
       await update(editing.id, data);
@@ -155,58 +159,88 @@ export default function Products({ onNavigate }: ProductsProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {filtered.map(product => (
-            <div key={product.id} className="card p-4 md:p-5 group hover:shadow-md transition-shadow animate-slide-up">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
-                    <Package className="w-5 h-5 text-slate-500" />
+            <div key={product.id} className="card overflow-hidden group hover:shadow-md transition-shadow animate-slide-up">
+              {product.image_url && (
+                <div className="relative h-32 md:h-36 bg-slate-100">
+                  <img src={product.image_url} alt="" className="w-full h-full object-cover" />
+                  <div className="absolute top-2 right-2 flex gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => openEdit(product)}
+                      className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-slate-500 hover:text-slate-800 shadow-sm transition-colors min-touch"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setConfirmDelete(product.id)}
+                      className="p-2 rounded-lg bg-white/90 backdrop-blur-sm text-slate-500 hover:text-red-500 shadow-sm transition-colors min-touch"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-slate-900 truncate">{product.name}</h3>
-                    <div className="flex items-center gap-2 flex-wrap mt-0.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wide text-slate-400">{product.item_type}</span>
-                      {product.category && (
-                        <span className="text-xs text-slate-400 flex items-center gap-0.5">
-                          <Tag className="w-3 h-3" />
-                          {product.category}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex-shrink-0">
-                  <button
-                    onClick={() => openEdit(product)}
-                    className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors min-touch"
-                  >
-                    <Pencil className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => setConfirmDelete(product.id)}
-                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors min-touch"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-              {product.description && (
-                <p className="text-sm text-slate-500 line-clamp-2 mb-3">{product.description}</p>
-              )}
-              <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                <div className="flex items-center gap-3">
-                  <span className="text-lg font-bold text-slate-900">{formatCurrency(product.unit_price, symbol)}</span>
-                  <span className="text-xs text-slate-400">/ {product.unit}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {product.sku && <span className="text-xs text-slate-400 font-mono">{product.sku}</span>}
-                  {product.tax_rate !== null && (
-                    <span className="text-xs text-slate-400">{product.tax_rate}% tax</span>
-                  )}
                   {!product.is_active && (
-                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 flex items-center gap-0.5">
+                    <span className="absolute bottom-2 left-2 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-slate-500 flex items-center gap-0.5">
                       <EyeOff className="w-3 h-3" /> Hidden
                     </span>
                   )}
+                </div>
+              )}
+              <div className="p-4 md:p-5">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    {!product.image_url && (
+                      <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+                        <Package className="w-5 h-5 text-slate-500" />
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-slate-900 truncate">{product.name}</h3>
+                      <div className="flex items-center gap-2 flex-wrap mt-0.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wide text-slate-400">{product.item_type}</span>
+                        {product.category && (
+                          <span className="text-xs text-slate-400 flex items-center gap-0.5">
+                            <Tag className="w-3 h-3" />
+                            {product.category}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {!product.image_url && (
+                    <div className="flex gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex-shrink-0">
+                      <button
+                        onClick={() => openEdit(product)}
+                        className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors min-touch"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => setConfirmDelete(product.id)}
+                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors min-touch"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {product.description && (
+                  <p className="text-sm text-slate-500 line-clamp-2 mb-3">{product.description}</p>
+                )}
+                <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg font-bold text-slate-900">{formatCurrency(product.unit_price, symbol)}</span>
+                    <span className="text-xs text-slate-400">/ {product.unit}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {product.sku && <span className="text-xs text-slate-400 font-mono">{product.sku}</span>}
+                    {product.tax_rate !== null && (
+                      <span className="text-xs text-slate-400">{product.tax_rate}% tax</span>
+                    )}
+                    {!product.image_url && !product.is_active && (
+                      <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-400 flex items-center gap-0.5">
+                        <EyeOff className="w-3 h-3" /> Hidden
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -237,6 +271,11 @@ export default function Products({ onNavigate }: ProductsProps) {
               </button>
             </div>
             <div className="space-y-4">
+              <ProductImageUpload
+                value={form.image_url}
+                onChange={url => setForm({ ...form, image_url: url })}
+                accent={profile?.accent_color || undefined}
+              />
               <div>
                 <label className="label">Name *</label>
                 <input
