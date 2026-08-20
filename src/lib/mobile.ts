@@ -46,7 +46,7 @@ export async function getWebBaseUrl(): Promise<string> {
   } catch { /* preferences plugin not available */ }
   const envUrl = import.meta.env.VITE_APP_URL as string | undefined;
   if (envUrl) return envUrl;
-  return 'https://crewbill.app';
+  return 'https://thatinvoice.app';
 }
 
 export async function setWebBaseUrl(url: string): Promise<void> {

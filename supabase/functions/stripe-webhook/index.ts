@@ -6,7 +6,7 @@ const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')!;
 const stripeWebhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')!;
 const stripe = new Stripe(stripeSecret, {
   appInfo: {
-    name: 'Crewbill',
+    name: 'ThatInvoice',
     version: '1.0.0',
   },
 });

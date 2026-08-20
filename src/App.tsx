@@ -159,7 +159,7 @@ export default function App() {
   const currentNav = view.name === 'editor' || view.name === 'preview' ? 'invoices' : view.name;
 
   const mobileTitles: Record<string, string> = {
-    dashboard: 'Crewbill',
+    dashboard: 'ThatInvoice',
     invoices: 'Invoices',
     'quick-invoice': 'Quick Invoice',
     editor: 'Edit Invoice',
@@ -174,7 +174,7 @@ export default function App() {
     team: 'Team',
     'paid-customers': 'Paid Customers',
   };
-  const mobileTitle = mobileTitles[view.name] || 'Crewbill';
+  const mobileTitle = mobileTitles[view.name] || 'ThatInvoice';
 
   function renderView() {
     if (view.name === 'dashboard') return <Dashboard onNavigate={navigate} />;
@@ -201,7 +201,7 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center gap-3">
           <LogoMark className="h-14 w-14" />
-          <p className="text-sm font-medium text-slate-400">Loading Crewbill…</p>
+          <p className="text-sm font-medium text-slate-400">Loading ThatInvoice…</p>
         </div>
       </div>
     );
@@ -374,7 +374,7 @@ export default function App() {
         {/* Footer — desktop only */}
         <footer className="hidden md:block border-t border-slate-200/80 bg-white px-6 py-4">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
-            <p>&copy; {new Date().getFullYear()} Crewbill. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} ThatInvoice. All rights reserved.</p>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
               <button onClick={() => navigate({ name: 'legal', page: 'privacy' })} className="hover:text-slate-600 transition-colors">Privacy Policy</button>
               <button onClick={() => navigate({ name: 'legal', page: 'terms' })} className="hover:text-slate-600 transition-colors">Terms of Service</button>

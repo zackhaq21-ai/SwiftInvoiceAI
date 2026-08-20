@@ -219,8 +219,8 @@ Deno.serve(async (req: Request) => {
 
     const html = buildInvoiceHtml({ business, invoice, items });
 
-    const fromAddress = Deno.env.get("RESEND_FROM_EMAIL") || "invoices@crewbillai.app";
-    const fromName = esc(business?.name) || "Crewbill";
+    const fromAddress = Deno.env.get("RESEND_FROM_EMAIL") || "invoices@thatinvoiceai.app";
+    const fromName = esc(business?.name) || "ThatInvoice";
 
     const emailPayload: Record<string, unknown> = {
       from: `${fromName} <${fromAddress}>`,

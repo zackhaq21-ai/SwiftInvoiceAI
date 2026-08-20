@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.crewbillai.app',
-  appName: 'Crewbill',
+  appId: 'com.thatinvoiceai.app',
+  appName: 'ThatInvoice',
   webDir: 'dist',
   bundledWebRuntime: false,
   server: {
