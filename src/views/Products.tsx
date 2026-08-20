@@ -6,6 +6,7 @@ import {
 import { useProducts } from '@/lib/hooks';
 import { useBusinessProfile } from '@/lib/hooks';
 import { formatCurrency } from '@/lib/format';
+import ProductImageUpload from '@/components/ProductImageUpload';
 import type { Product, ItemType } from '@/lib/types';
 import type { View } from '@/App';
 
@@ -25,6 +26,7 @@ const UNITS = ['ea', 'hr', 'day', 'sq ft', 'ft', 'lb', 'box', 'lot', 'set', 'kg'
 const emptyForm = {
   name: '', description: '', item_type: 'service' as ItemType,
   category: '', sku: '', unit: 'ea', unit_price: 0, tax_rate: '' as string | number, is_active: true,
+  image_url: '',
 };
 
 export default function Products({ onNavigate }: ProductsProps) {
@@ -70,6 +72,7 @@ export default function Products({ onNavigate }: ProductsProps) {
       unit_price: product.unit_price,
       tax_rate: product.tax_rate ?? '',
       is_active: product.is_active,
+      image_url: product.image_url || '',
     });
     setEditing(product);
     setShowForm(true);
@@ -87,6 +90,7 @@ export default function Products({ onNavigate }: ProductsProps) {
       unit_price: Number(form.unit_price) || 0,
       tax_rate: form.tax_rate === '' ? null : Number(form.tax_rate),
       is_active: form.is_active,
+      image_url: form.image_url || null,
     };
     if (editing) {
       await update(editing.id, data);
@@ -158,8 +162,12 @@ export default function Products({ onNavigate }: ProductsProps) {
             <div key={product.id} className="card p-4 md:p-5 group hover:shadow-md transition-shadow animate-slide-up">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
-                    <Package className="w-5 h-5 text-slate-500" />
+                  <div className="w-11 h-11 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {product.image_url ? (
+                      <img src={product.image_url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <Package className="w-5 h-5 text-slate-500" />
+                    )}
                   </div>
                   <div className="min-w-0">
                     <h3 className="font-semibold text-slate-900 truncate">{product.name}</h3>
@@ -237,6 +245,10 @@ export default function Products({ onNavigate }: ProductsProps) {
               </button>
             </div>
             <div className="space-y-4">
+              <ProductImageUpload
+                value={form.image_url}
+                onChange={url => setForm({ ...form, image_url: url })}
+              />
               <div>
                 <label className="label">Name *</label>
                 <input

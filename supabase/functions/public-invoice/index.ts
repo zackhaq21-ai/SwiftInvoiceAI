@@ -35,10 +35,11 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Fetch only the minimal data needed to display the payment page.
-    // Deliberately excludes: user_id, notes, terms, warranty, metadata,
-    // client_address, client_phone, work_order_number, technician_name,
-    // internal IDs, stripe IDs, and other private fields.
+    // Fetch only the minimal data needed to display the payment page, plus
+    // `metadata` (read below to record the invoice's first open, but never
+    // included in the response). Deliberately excludes: user_id, notes, terms,
+    // warranty, client_address, client_phone, work_order_number,
+    // technician_name, internal IDs, stripe IDs, and other private fields.
     const { data: invoice, error: invError } = await supabase
       .from("invoices")
       .select(`
@@ -56,6 +57,7 @@ Deno.serve(async (req: Request) => {
         payment_status,
         status,
         document_type,
+        metadata,
         business_profile!inner (
           name,
           logo_url,
@@ -73,6 +75,22 @@ Deno.serve(async (req: Request) => {
         status: 404,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Record the first time the client opens this invoice's public link, so the
+    // business owner can see a real "Opened" step on the invoice's delivery
+    // timeline. Only set once — never overwritten on later visits — and never
+    // allowed to block or fail the response if the write itself fails.
+    const metadata = (invoice.metadata as Record<string, unknown> | null) || {};
+    if (!metadata.opened_at) {
+      try {
+        await supabase
+          .from("invoices")
+          .update({ metadata: { ...metadata, opened_at: new Date().toISOString() } })
+          .eq("id", invoiceId);
+      } catch {
+        // Non-fatal — the invoice still renders even if the open couldn't be recorded.
+      }
     }
 
     // Only invoices that are sent or overdue can be paid publicly
