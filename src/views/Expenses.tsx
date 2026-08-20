@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   Plus, Trash2, Pencil, Receipt, TrendingDown, Search,
-  X, Loader2, Tag, Calendar, DollarSign,
+  X, Loader2, DollarSign,
 } from 'lucide-react';
 import { useExpenses, useBusinessProfile } from '@/lib/hooks';
 import { formatCurrency, formatDate, todayISO } from '@/lib/format';
@@ -28,6 +28,7 @@ interface ExpensesProps {
 }
 
 export default function Expenses({ onNavigate }: ExpensesProps) {
+  void onNavigate;
   const { expenses, loading, create, update, remove } = useExpenses();
   const { profile } = useBusinessProfile();
   const symbol = profile?.currency_symbol || '$';

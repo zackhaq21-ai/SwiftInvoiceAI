@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { formatCurrency, formatDate } from '@/lib/format';
+import { extractFunctionErrorMessage } from '@/lib/edgeFunctionError';
 
 interface PublicInvoiceData {
   invoice: {
@@ -86,14 +87,8 @@ export default function PayInvoice({ invoiceId }: PayInvoiceProps) {
         headers: session ? { Authorization: `Bearer ${session.access_token}` } : undefined,
       });
       if (fnError) {
-        let msg = result?.error || null;
-        if (!msg) {
-          try {
-            const body = await (fnError as any).context?.json?.();
-            msg = body?.error || null;
-          } catch {}
-        }
-        throw new Error(msg || fnError.message || 'Failed to start payment.');
+        const msg = result?.error || await extractFunctionErrorMessage(fnError, 'Failed to start payment.');
+        throw new Error(msg);
       }
       if (result?.error) throw new Error(result.error);
       if (result?.url) {
@@ -101,8 +96,9 @@ export default function PayInvoice({ invoiceId }: PayInvoiceProps) {
       } else {
         throw new Error('No checkout URL returned');
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to start payment. Please try again.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to start payment. Please try again.';
+      setError(message);
       setRedirecting(false);
     }
   };

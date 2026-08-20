@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   Plus, Search, Pencil, Trash2, X, Package,
-  Tag, Boxes, Eye, EyeOff,
+  Tag, Boxes, EyeOff,
 } from 'lucide-react';
 import { useProducts } from '@/lib/hooks';
 import { useBusinessProfile } from '@/lib/hooks';
@@ -27,7 +27,8 @@ const emptyForm = {
   category: '', sku: '', unit: 'ea', unit_price: 0, tax_rate: '' as string | number, is_active: true,
 };
 
-export default function Products({ onNavigate: _onNavigate }: ProductsProps) {
+export default function Products({ onNavigate }: ProductsProps) {
+  void onNavigate;
   const { products, loading, create, update, remove } = useProducts();
   const { profile } = useBusinessProfile();
   const symbol = profile?.currency_symbol || '$';

@@ -35,8 +35,9 @@ Deno.serve(async (req) => {
     let event: Stripe.Event;
     try {
       event = await stripe.webhooks.constructEventAsync(body, signature, stripeWebhookSecret);
-    } catch (error: any) {
-      console.error(`Webhook signature verification failed: ${error.message}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`Webhook signature verification failed: ${message}`);
       return jsonResponse(`Webhook signature verification failed`, 400);
     }
 
@@ -72,7 +73,7 @@ Deno.serve(async (req) => {
     EdgeRuntime.waitUntil(handleEvent(event));
 
     return jsonResponse({ received: true });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error processing webhook:', error);
     return jsonResponse({ error: 'Internal error' }, 500);
   }

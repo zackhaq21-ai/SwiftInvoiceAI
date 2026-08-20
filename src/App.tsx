@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import {
   LayoutDashboard, FileText, Users, Mic, Settings,
   LogOut, Crown, Boxes, Receipt,
@@ -11,25 +11,27 @@ import { LogoWordmark, LogoMark } from '@/components/Logo';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import MobileTopBar from '@/components/MobileTopBar';
 import CreateLauncher from '@/components/CreateLauncher';
-import Dashboard from '@/views/Dashboard';
-import InvoiceList from '@/views/InvoiceList';
-import InvoiceEditor from '@/views/InvoiceEditor';
-import InvoicePreview from '@/views/InvoicePreview';
-import Clients from '@/views/Clients';
-import Products from '@/views/Products';
-import VoiceInvoice from '@/views/VoiceInvoice';
-import SettingsView from '@/views/Settings';
 import Login from '@/views/Login';
-import UpgradeModal from '@/views/UpgradeModal';
-import PayInvoice from '@/views/PayInvoice';
-import Expenses from '@/views/Expenses';
-import Reports from '@/views/Reports';
-import Estimates from '@/views/Estimates';
-import Legal from '@/views/Legal';
-import PaidCustomers from '@/views/PaidCustomers';
-import QuickInvoice from '@/views/QuickInvoice';
-import Team from '@/views/Team';
 import AdminGuard from '@/components/AdminGuard';
+import AppErrorBoundary from '@/components/AppErrorBoundary';
+
+const Dashboard = lazy(() => import('@/views/Dashboard'));
+const InvoiceList = lazy(() => import('@/views/InvoiceList'));
+const InvoiceEditor = lazy(() => import('@/views/InvoiceEditor'));
+const InvoicePreview = lazy(() => import('@/views/InvoicePreview'));
+const Clients = lazy(() => import('@/views/Clients'));
+const Products = lazy(() => import('@/views/Products'));
+const VoiceInvoice = lazy(() => import('@/views/VoiceInvoice'));
+const SettingsView = lazy(() => import('@/views/Settings'));
+const UpgradeModal = lazy(() => import('@/views/UpgradeModal'));
+const PayInvoice = lazy(() => import('@/views/PayInvoice'));
+const Expenses = lazy(() => import('@/views/Expenses'));
+const Reports = lazy(() => import('@/views/Reports'));
+const Estimates = lazy(() => import('@/views/Estimates'));
+const Legal = lazy(() => import('@/views/Legal'));
+const PaidCustomers = lazy(() => import('@/views/PaidCustomers'));
+const QuickInvoice = lazy(() => import('@/views/QuickInvoice'));
+const Team = lazy(() => import('@/views/Team'));
 
 export type View =
   | { name: 'dashboard' }
@@ -53,6 +55,7 @@ function viewFromPath(): View {
   const path = window.location.pathname;
   const payMatch = path.match(/^\/pay\/([a-f0-9-]+)$/i);
   if (payMatch) return { name: 'pay', invoiceId: payMatch[1] };
+  if (path === '/invoices/new') return { name: 'editor' };
   const editorMatch = path.match(/^\/invoices\/([a-f0-9-]+)\/edit$/i);
   if (editorMatch) return { name: 'editor', invoiceId: editorMatch[1] };
   const previewMatch = path.match(/^\/invoices\/([a-f0-9-]+)$/i);
@@ -76,6 +79,21 @@ function viewFromPath(): View {
     '/contact': { name: 'legal', page: 'contact' },
   };
   return navMap[path] || { name: 'dashboard' };
+}
+
+function ScreenLoader() {
+  return (
+    <div className="mx-auto w-full max-w-7xl p-4 md:p-8" role="status" aria-label="Loading screen">
+      <div className="animate-pulse space-y-5">
+        <div className="h-8 w-44 rounded-xl bg-slate-200/80" />
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {[0, 1, 2, 3].map(item => <div key={item} className="h-28 rounded-2xl bg-white/80 shadow-sm" />)}
+        </div>
+        <div className="h-64 rounded-3xl bg-white/80 shadow-sm" />
+      </div>
+      <span className="sr-only">Loading…</span>
+    </div>
+  );
 }
 
 export default function App() {
@@ -111,12 +129,21 @@ export default function App() {
     setCreateOpen(false);
     let path = '/';
     if (newView.name === 'pay') path = `/pay/${newView.invoiceId}`;
-    else if (newView.name === 'editor') path = `/invoices/${newView.invoiceId}/edit`;
+    else if (newView.name === 'editor') path = newView.invoiceId ? `/invoices/${newView.invoiceId}/edit` : '/invoices/new';
     else if (newView.name === 'preview') path = `/invoices/${newView.invoiceId}`;
     else if (newView.name === 'legal') path = `/${newView.page}`;
     else if (newView.name === 'team') path = '/team';
     else if (newView.name !== 'dashboard') path = `/${newView.name}`;
     window.history.pushState({ view: newView }, '', path);
+  }
+
+  async function handleSignOut() {
+    await signOut();
+    const loginView: View = { name: 'dashboard' };
+    setView(loginView);
+    setCreateOpen(false);
+    setShowUpgrade(false);
+    window.history.replaceState({ view: loginView }, '', '/');
   }
 
   useEffect(() => {
@@ -182,10 +209,10 @@ export default function App() {
 
   if (!user) {
     if (view.name === 'pay') {
-      return <PayInvoice invoiceId={view.invoiceId} />;
+      return <Suspense fallback={<ScreenLoader />}><PayInvoice invoiceId={view.invoiceId} /></Suspense>;
     }
     if (view.name === 'legal') {
-      return <Legal page={view.page} onNavigate={navigate} />;
+      return <Suspense fallback={<ScreenLoader />}><Legal page={view.page} onNavigate={navigate} /></Suspense>;
     }
     return <Login />;
   }
@@ -318,7 +345,7 @@ export default function App() {
               <p className="text-xs text-slate-400 truncate capitalize">{tier === 'admin' ? 'Admin' : `${tier} plan`}</p>
             </div>
             <button
-              onClick={signOut}
+              onClick={handleSignOut}
               className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
               title="Sign out"
             >
@@ -332,12 +359,16 @@ export default function App() {
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Mobile top bar */}
         {isMobile && view.name !== 'pay' && (
-          <MobileTopBar title={mobileTitle} onNavigate={navigate} onSignOut={signOut} />
+          <MobileTopBar title={mobileTitle} onNavigate={navigate} onSignOut={handleSignOut} />
         )}
 
         {/* Views */}
         <main className="flex-1 overflow-x-hidden pb-bottom-nav md:pb-0">
-          {renderView()}
+          <AppErrorBoundary onReset={() => navigate({ name: 'dashboard' })}>
+            <Suspense fallback={<ScreenLoader />}>
+              {renderView()}
+            </Suspense>
+          </AppErrorBoundary>
         </main>
 
         {/* Footer — desktop only */}
@@ -362,7 +393,9 @@ export default function App() {
       {/* Mobile create launcher */}
       <CreateLauncher open={createOpen} onClose={() => setCreateOpen(false)} onNavigate={navigate} />
 
-      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} />
+      <Suspense fallback={null}>
+        <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} />
+      </Suspense>
     </div>
   );
 }

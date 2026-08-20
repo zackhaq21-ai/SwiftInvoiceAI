@@ -16,7 +16,8 @@ const TABS: { id: Tab; label: string; icon: typeof UsersRound }[] = [
   { id: 'ai', label: 'Team AI', icon: Sparkles },
 ];
 
-export default function Team(_props: TeamProps) {
+export default function Team({ onNavigate }: TeamProps) {
+  void onNavigate;
   const { user } = useAuth();
 
   return (

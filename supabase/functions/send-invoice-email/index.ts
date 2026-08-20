@@ -55,15 +55,51 @@ function escMultiline(value: unknown): string {
   return esc(value).replace(/\n/g, "<br>");
 }
 
-function buildInvoiceHtml(payload: any): string {
+interface InvoiceEmailBusiness {
+  currency_symbol?: string;
+  accent_color?: string;
+  name?: string;
+  email?: string;
+  address?: string;
+}
+
+interface InvoiceEmailItem {
+  description?: string;
+  quantity?: number;
+  unit_price?: number;
+  total?: number;
+}
+
+interface InvoiceEmailInvoice {
+  id?: string;
+  invoice_number?: string;
+  client_name?: string;
+  client_email?: string;
+  issue_date?: string;
+  due_date?: string;
+  subtotal?: number;
+  discount_amount?: number;
+  tax_amount?: number;
+  tax_rate?: number;
+  total?: number;
+  notes?: string;
+}
+
+interface InvoiceEmailPayload {
+  business?: InvoiceEmailBusiness;
+  invoice: InvoiceEmailInvoice;
+  items?: InvoiceEmailItem[];
+}
+
+function buildInvoiceHtml(payload: InvoiceEmailPayload): string {
   const { business, invoice, items } = payload;
   const symbol = esc(business?.currency_symbol || "$");
   const accent = esc(business?.accent_color || "#2563eb");
 
-  const fmt = (n: number) =>
+  const fmt = (n: number | undefined) =>
     `${symbol}${(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-  const itemsHtml = (items || []).map((item: any) => `
+  const itemsHtml = (items || []).map((item) => `
     <tr>
       <td style="padding:12px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#334155">${esc(item.description) || "&mdash;"}</td>
       <td style="padding:12px 0;border-bottom:1px solid #f1f5f9;text-align:right;font-size:14px;color:#475569">${esc(item.quantity)}</td>

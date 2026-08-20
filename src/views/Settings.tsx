@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
   Save, Check, Building2, Palette, DollarSign, FileText,
-  Crown, Shield, CreditCard, Lock, X,
+  Crown, CreditCard, Lock, X,
 } from 'lucide-react';
 import { useBusinessProfile } from '@/lib/hooks';
 import { useAuth } from '@/lib/auth';
-import { PLANS, hasFeature } from '@/lib/plans';
+import { hasFeature } from '@/lib/plans';
 import { INDUSTRY_LIST, type IndustryId } from '@/lib/industryTemplates';
 import type { BusinessType } from '@/lib/types';
 import LogoUpload from '@/components/LogoUpload';

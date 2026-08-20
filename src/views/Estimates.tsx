@@ -97,7 +97,8 @@ export default function Estimates({ onNavigate }: EstimatesProps) {
       const items = estimate.invoice_items || [];
       if (items.length > 0) {
         const itemsCopy = items.map((item, i) => {
-          const { id: _id, invoice_id: _invId, user_id: _uid, created_at: _ca, updated_at: _ua, ...rest } = item as any;
+          const { id: _id, invoice_id: _invId, user_id: _uid, ...rest } = item;
+          void _id; void _invId; void _uid;
           return { ...rest, user_id: user.id, invoice_id: inv.id, sort_order: i };
         });
         await supabase.from('invoice_items').insert(itemsCopy);
@@ -269,7 +270,6 @@ export default function Estimates({ onNavigate }: EstimatesProps) {
               <tbody className="divide-y divide-slate-50">
                 {filtered.map(est => {
                   const meta = STATUS_META[est.status as EstimateStatus] || STATUS_META.draft;
-                  const Icon = meta.icon;
                   return (
                     <tr key={est.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="px-6 py-3.5">

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   Plus, Search, FileText, Eye, Pencil, Trash2,
-  ChevronDown, Mic, Filter,
+  ChevronDown, Mic,
 } from 'lucide-react';
 import { useInvoices, useBusinessProfile } from '@/lib/hooks';
 import { formatCurrency, formatDate, statusColor } from '@/lib/format';
@@ -54,16 +54,6 @@ export default function InvoiceList({ onNavigate }: InvoiceListProps) {
       </div>
     );
   }
-
-  const renderStatusBadge = (status: InvoiceStatus) => {
-    const sc = statusColor(status);
-    return (
-      <span className={`badge ${sc.bg} ${sc.text} text-[10px] md:text-xs`}>
-        <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </span>
-    );
-  };
 
   return (
     <div className="p-4 md:p-6 lg:p-10 max-w-7xl mx-auto animate-fade-in pb-bottom-nav md:pb-10">

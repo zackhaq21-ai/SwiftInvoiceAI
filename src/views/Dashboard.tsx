@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import {
   TrendingUp, FileText, Clock, CheckCircle2, DollarSign,
-  ArrowUpRight, ArrowDownRight, Mic, Plus, RefreshCw, AlertCircle,
+  ArrowUpRight, ArrowDownRight, Mic, Plus, RefreshCw, AlertCircle, Sparkles, Zap,
 } from 'lucide-react';
 import { useInvoices, useBusinessProfile } from '@/lib/hooks';
-import { formatCurrency, formatDate, statusColor, relativeTime } from '@/lib/format';
+import { formatCurrency, statusColor, relativeTime } from '@/lib/format';
 import type { View } from '@/App';
 
 interface DashboardProps {
@@ -139,12 +139,13 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
   return (
     <div className="p-4 md:p-6 lg:p-10 max-w-7xl mx-auto animate-fade-in pb-bottom-nav md:pb-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+      <div className="hidden md:flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-sm text-slate-500 mt-1 hidden sm:block">Welcome back — here's your business at a glance.</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600 mb-2">Command center</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-950">{profile?.name || 'Your business'}</h1>
+          <p className="text-sm text-slate-500 mt-1">Everything that needs your attention, in one place.</p>
         </div>
-        <div className="hidden md:flex gap-2">
+        <div className="flex gap-2">
           <button onClick={() => onNavigate({ name: 'voice' })} className="btn-secondary">
             <Mic className="w-4 h-4" />
             Voice Invoice
@@ -156,14 +157,36 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
         </div>
       </div>
 
-      {/* Mobile dominant Create Invoice action */}
-      <button
-        onClick={() => onNavigate({ name: 'editor' })}
-        className="md:hidden w-full mb-4 min-touch rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-3.5 px-4 flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 active:scale-[0.98] transition-transform"
-      >
-        <Plus className="w-5 h-5" strokeWidth={2.5} />
-        Create Invoice
-      </button>
+      {/* Mobile hero — a fast, one-thumb starting point */}
+      <section className="md:hidden relative overflow-hidden rounded-[1.75rem] p-5 mb-4 text-white premium-hero">
+        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-indigo-400/30 blur-3xl" />
+        <div className="absolute -left-16 -bottom-24 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="relative">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-100">
+              <Sparkles className="h-3 w-3" /> AI workspace
+            </span>
+          </div>
+          <p className="text-sm text-indigo-100/75">Welcome back</p>
+          <h1 className="mt-0.5 text-2xl font-extrabold tracking-tight truncate">{profile?.name || 'Swift Invoice AI'}</h1>
+          <p className="mt-2 max-w-[18rem] text-sm leading-relaxed text-slate-300">Turn today’s work into money in under a minute.</p>
+          <button
+            onClick={() => onNavigate({ name: 'editor' })}
+            className="mt-5 w-full min-touch rounded-2xl bg-white text-slate-950 font-bold py-3.5 px-4 flex items-center justify-center gap-2 shadow-xl shadow-black/20 active:scale-[0.98] transition-transform"
+          >
+            <Plus className="w-5 h-5" strokeWidth={2.7} />
+            Create an invoice
+          </button>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <button onClick={() => onNavigate({ name: 'voice' })} className="min-touch rounded-xl border border-white/10 bg-white/[0.08] px-3 py-2.5 text-xs font-semibold text-white backdrop-blur flex items-center justify-center gap-2 active:scale-[0.98]">
+              <Mic className="w-4 h-4 text-cyan-300" /> Speak a job
+            </button>
+            <button onClick={() => onNavigate({ name: 'quick-invoice' })} className="min-touch rounded-xl border border-white/10 bg-white/[0.08] px-3 py-2.5 text-xs font-semibold text-white backdrop-blur flex items-center justify-center gap-2 active:scale-[0.98]">
+              <Zap className="w-4 h-4 text-amber-300" /> Quick invoice
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* Stat cards — 2x2 on mobile, 4-col on desktop */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">

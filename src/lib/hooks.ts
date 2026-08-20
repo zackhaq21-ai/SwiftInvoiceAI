@@ -135,8 +135,8 @@ export function useInvoices() {
 
     if (items.length > 0) {
       const itemsWithInvoice = items.map((item, i) => {
-        const { id: _id, invoice_id: _invId, user_id: _uid, created_at: _ca, updated_at: _ua, ...rest } = item as Omit<InvoiceItem, 'id' | 'invoice_id' | 'user_id' | 'created_at' | 'updated_at'>;
-        void _id; void _invId; void _uid; void _ca; void _ua;
+        const { id: _id, invoice_id: _invId, user_id: _uid, ...rest } = item;
+        void _id; void _invId; void _uid;
         return {
           ...rest,
           user_id: user.id,
@@ -172,8 +172,8 @@ export function useInvoices() {
     await supabase.from('invoice_items').delete().eq('invoice_id', id);
     if (items.length > 0 && user) {
       const itemsWithInvoice = items.map((item, i) => {
-        const { id: _id, invoice_id: _invId, user_id: _uid, created_at: _ca, updated_at: _ua, ...rest } = item as Omit<InvoiceItem, 'id' | 'invoice_id' | 'user_id' | 'created_at' | 'updated_at'>;
-        void _id; void _invId; void _uid; void _ca; void _ua;
+        const { id: _id, invoice_id: _invId, user_id: _uid, ...rest } = item;
+        void _id; void _invId; void _uid;
         return {
           ...rest,
           user_id: user.id,
