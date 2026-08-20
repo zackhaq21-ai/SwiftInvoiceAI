@@ -2,13 +2,14 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   Mic, MicOff, ArrowLeft, Sparkles, Plus, Trash2,
   Check, FileText, Loader2, Send, Edit3, X,
-  Bot, ChevronRight, ClipboardList, RotateCcw,
+  Bot, ClipboardList, RotateCcw,
 } from 'lucide-react';
 import { useClients, useBusinessProfile, useInvoices } from '@/lib/hooks';
 import { parseVoiceInvoice, generateInvoiceNumber } from '@/lib/voiceParser';
 import { formatCurrency, todayISO, addDays, formatDate } from '@/lib/format';
 import { calcItemTotal, recalcInvoice } from '@/lib/calc';
 import { supabase } from '@/lib/supabase';
+import { getSpeechRecognition, type SpeechRecognitionLike } from '@/lib/speech';
 import type { InvoiceItem } from '@/lib/types';
 import type { View } from '@/App';
 
@@ -40,7 +41,15 @@ interface ChatMessage {
   role: MsgRole;
   type: MsgType;
   content: string;
-  data?: ItemCardData | ReviewCardData | SuccessCardData;
+  data?: ClientCardData | ItemCardData | ReviewCardData | SuccessCardData;
+}
+
+interface ClientCardData {
+  name: string;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  pending: boolean;
 }
 
 interface ItemCardData {
@@ -75,18 +84,6 @@ interface DraftItem {
   quantity: number;
   unit_price: number;
 }
-
-type SpeechRecognitionLike = {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  start: () => void;
-  stop: () => void;
-  onresult: ((event: any) => void) | null;
-  onend: (() => void) | null;
-  onerror: ((event: any) => void) | null;
-  onstart: (() => void) | null;
-};
 
 let msgCounter = 0;
 function newId(): string {
@@ -150,7 +147,7 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
   }, [messages, aiTyping]);
 
   // ---- AI message helper with typing delay ----
-  const aiSay = useCallback((content: string, type: MsgType = 'text', data?: any) => {
+  const aiSay = useCallback((content: string, type: MsgType = 'text', data?: ChatMessage['data']) => {
     setAiTyping(true);
     const delay = type === 'text' ? 600 : 900;
     setTimeout(() => {
@@ -177,14 +174,13 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
 
   // ---- Voice recognition ----
   useEffect(() => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = getSpeechRecognition();
     if (!SpeechRecognition) {
       setSupported(false);
       return;
     }
 
-    const recognition = new SpeechRecognition() as SpeechRecognitionLike;
+    const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
@@ -193,7 +189,7 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
       setListening(true);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event) => {
       let finalText = '';
       let interimText = '';
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -212,7 +208,7 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
       }
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event) => {
       if (event.error === 'no-speech') return;
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
         aiSay("I couldn't access your microphone. You can type instead — just use the text box below.");
@@ -237,7 +233,7 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
     recognitionRef.current = recognition;
 
     return () => {
-      try { recognition.stop(); } catch {}
+      try { recognition.stop(); } catch { /* already stopped */ }
     };
   }, []); // eslint-disable-line
 
@@ -250,7 +246,7 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
       shouldAutoSendRef.current = false;
       try {
         recognitionRef.current.start();
-      } catch {}
+      } catch { /* already listening or mic unavailable */ }
     }
   }, [listening]);
 
@@ -306,7 +302,7 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
         // Also try to grab an email or phone mentioned alongside the name
         const emailMatch = clean.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i);
         const phoneMatch = clean.match(/(\+?\d[\d\s().-]{8,}\d)/);
-        let name = parsed.clientName || clean
+        const name = parsed.clientName || clean
           .replace(/^(?:invoice|bill|for|to|from|client|customer)\s+/i, '')
           .replace(emailMatch?.[0] || '__none__', '')
           .replace(phoneMatch?.[0] || '__none__', '')
@@ -459,15 +455,14 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
 
       case 'due_date': {
         let days = 30;
-        let label = '';
         if (/receipt|immediately|right\s+away|now|due\s+on\s+receipt|on\s+receipt/i.test(clean)) {
-          days = 0; label = 'Due on receipt';
+          days = 0;
         } else if (/end\s+of\s+month|eom/i.test(clean)) {
-          days = 30; label = 'End of month';
+          days = 30;
         } else if (/next\s+week|a\s+week/i.test(clean)) {
-          days = 7; label = '7 days';
+          days = 7;
         } else if (/two\s+weeks|fortnight/i.test(clean)) {
-          days = 14; label = '14 days';
+          days = 14;
         } else {
           // "net 15", "15 days", "15"
           const netMatch = clean.match(/net\s+(\d+)/i);
@@ -475,15 +470,14 @@ export default function VoiceInvoice({ onNavigate }: VoiceInvoiceProps) {
           const source = netMatch || dayMatch;
           if (source) {
             days = parseInt(source[1], 10);
-            label = days === 0 ? 'Due on receipt' : `${days} days`;
           }
           // Try a specific date like "August 15" or "8/15"
-          const dateMatch = clean.match(/(\d{1,2})[\/-](\d{1,2})/);
+          const dateMatch = clean.match(/(\d{1,2})[/-](\d{1,2})/);
           if (dateMatch) {
             const target = new Date(new Date().getFullYear(), parseInt(dateMatch[1]) - 1, parseInt(dateMatch[2]));
             const diff = Math.ceil((target.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
             if (diff >= 0 && diff <= 365) {
-              days = diff; label = formatDate(target.toISOString());
+              days = diff;
             }
           }
         }
@@ -945,6 +939,7 @@ function MessageBubble({
   onMoreItemsYes, onMoreItemsNo,
   onEditFromReview, onReviewItemsChange, onFinalize, saving, step,
 }: MessageBubbleProps) {
+  void onMoreItemsYes; void onMoreItemsNo;
   const isAI = msg.role === 'ai';
 
   if (!isAI) {
@@ -980,8 +975,8 @@ function MessageBubble({
                   <Sparkles className="w-4 h-4" style={{ color: accent }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-900 truncate">{(msg.data as any).name}</p>
-                  {(msg.data as any).email && <p className="text-xs text-slate-400 truncate">{(msg.data as any).email}</p>}
+                  <p className="text-sm font-semibold text-slate-900 truncate">{(msg.data as ClientCardData).name}</p>
+                  {(msg.data as ClientCardData).email && <p className="text-xs text-slate-400 truncate">{(msg.data as ClientCardData).email}</p>}
                 </div>
               </div>
             </div>

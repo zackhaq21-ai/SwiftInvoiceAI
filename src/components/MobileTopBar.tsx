@@ -1,4 +1,4 @@
-import { MoreVertical, Bell } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/lib/auth';
 import type { View } from '@/App';
@@ -36,14 +36,6 @@ export default function MobileTopBar({ title, onNavigate, onSignOut }: MobileTop
         <h1 className="text-base font-bold text-slate-900 truncate">{title}</h1>
 
         <div className="flex items-center gap-1">
-          <button
-            onClick={() => onNavigate({ name: 'dashboard' })}
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors min-touch"
-            aria-label="Notifications"
-          >
-            <Bell className="w-5 h-5" />
-          </button>
-
           <div ref={menuRef} className="relative">
             <button
               onClick={() => setMenuOpen(o => !o)}

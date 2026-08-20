@@ -26,7 +26,7 @@ describe('InvoiceEditor autosave', () => {
     const hasExisting = true;
     const status = 'draft';
 
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       if (hasExisting && status === 'draft') update();
     }, 2000);
 
@@ -259,8 +259,8 @@ describe('Manual save race prevention', () => {
 
 describe('Create with AI review-first', () => {
   it('populates fields but does not auto-send', () => {
-    let sentCount = 0;
-    let populatedFields: Record<string, unknown> = {};
+    const sentCount = 0;
+    const populatedFields: Record<string, unknown> = {};
 
     const handleAIGenerate = (input: string) => {
       // Simulate parsing
@@ -277,11 +277,6 @@ describe('Create with AI review-first', () => {
 
   it('shows loading state during AI processing', () => {
     let loading = false;
-    const handleAIGenerate = () => {
-      loading = true;
-      // ... async work ...
-      loading = false;
-    };
 
     expect(loading).toBe(false);
     loading = true;
@@ -323,8 +318,14 @@ describe('Create with AI review-first', () => {
 
 // ── Create launcher routing ────────────────────────────────────────────────
 
+interface LauncherView {
+  name: string;
+  documentType?: string;
+  aiMode?: boolean;
+}
+
 describe('Create launcher routing', () => {
-  const CREATE_OPTIONS = [
+  const CREATE_OPTIONS: { id: string; view: LauncherView }[] = [
     { id: 'invoice', view: { name: 'editor' } },
     { id: 'estimate', view: { name: 'editor', documentType: 'estimate' } },
     { id: 'ai', view: { name: 'editor', aiMode: true } },
@@ -342,13 +343,13 @@ describe('Create launcher routing', () => {
   it('estimate routes to editor with documentType estimate', () => {
     const opt = CREATE_OPTIONS.find(o => o.id === 'estimate');
     expect(opt!.view.name).toBe('editor');
-    expect((opt!.view as any).documentType).toBe('estimate');
+    expect(opt!.view.documentType).toBe('estimate');
   });
 
   it('AI routes to editor with aiMode, not voice', () => {
     const opt = CREATE_OPTIONS.find(o => o.id === 'ai');
     expect(opt!.view.name).toBe('editor');
-    expect((opt!.view as any).aiMode).toBe(true);
+    expect(opt!.view.aiMode).toBe(true);
   });
 
   it('voice routes to voice view (distinct from AI)', () => {
@@ -380,7 +381,7 @@ describe('Create launcher routing', () => {
 
   it('no two options share the same route (except editor variants)', () => {
     const routes = CREATE_OPTIONS.map(o => {
-      const v = o.view as any;
+      const v = o.view;
       return `${v.name}:${v.documentType || v.aiMode || ''}`;
     });
     const unique = new Set(routes);

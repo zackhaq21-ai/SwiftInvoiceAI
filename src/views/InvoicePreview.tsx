@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import {
   ArrowLeft, Send, Check, Mail, Printer, Pencil,
   CreditCard, Loader2, Plus, Trash2, Wallet, CheckCircle2,
-  Share2, MoreHorizontal, Copy, FileEdit,
+  Share2, MoreHorizontal,
 } from 'lucide-react';
 import { useInvoices, useBusinessProfile, useInvoicePayments } from '@/lib/hooks';
 import { useAuth } from '@/lib/auth';
@@ -10,6 +10,7 @@ import { hasFeature } from '@/lib/plans';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { supabase } from '@/lib/supabase';
 import { getIndustryTemplate } from '@/lib/industryTemplates';
+import { extractFunctionErrorMessage } from '@/lib/edgeFunctionError';
 import UpgradeModal from '@/views/UpgradeModal';
 import type { InvoiceStatus, PaymentMethod } from '@/lib/types';
 import type { View } from '@/App';
@@ -32,7 +33,7 @@ export default function InvoicePreview({ invoiceId, onNavigate }: InvoicePreview
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showPayCopied, setShowPayCopied] = useState(false);
-  const [redirectTimer, setRedirectTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const redirectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const canSendEmail = hasFeature(tier, 'emailSending');
   const canAcceptPayments = hasFeature(tier, 'directPayments');
@@ -44,13 +45,13 @@ export default function InvoicePreview({ invoiceId, onNavigate }: InvoicePreview
   const balanceDue = Math.max(0, (invoice?.total || 0) - totalPaid - (invoice?.deposit_amount || 0));
 
   useEffect(() => {
-    if (redirectTimer) {
-      clearTimeout(redirectTimer);
-      setRedirectTimer(null);
+    if (redirectTimerRef.current) {
+      clearTimeout(redirectTimerRef.current);
+      redirectTimerRef.current = null;
     }
     if (invoicesLoading || invoice) return;
     const timer = setTimeout(() => onNavigate({ name: 'invoices' }), 3000);
-    setRedirectTimer(timer);
+    redirectTimerRef.current = timer;
     return () => clearTimeout(timer);
   }, [invoice, invoicesLoading, onNavigate]);
 
@@ -89,21 +90,15 @@ export default function InvoicePreview({ invoiceId, onNavigate }: InvoicePreview
         headers: session ? { Authorization: `Bearer ${session.access_token}` } : undefined,
       });
       if (error) {
-        // Extract the real error message from the edge function response body
-        let msg = data?.error || null;
-        if (!msg) {
-          try {
-            const body = await (error as any).context?.json?.();
-            msg = body?.error || null;
-          } catch {}
-        }
-        throw new Error(msg || error.message || 'Unknown error');
+        const msg = data?.error || await extractFunctionErrorMessage(error, 'Unknown error');
+        throw new Error(msg);
       }
       if (data?.error) throw new Error(data.error);
       setEmailStatus(`Email sent to ${invoice.client_email}`);
       if (invoice.status === 'draft') updateStatus(invoice.id, 'sent');
-    } catch (err: any) {
-      setEmailStatus(`Failed to send: ${err.message || 'Unknown error'}`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setEmailStatus(`Failed to send: ${message}`);
     } finally {
       setSendingEmail(false);
       setTimeout(() => setEmailStatus(null), 5000);

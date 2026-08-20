@@ -3,7 +3,7 @@ import {
   ArrowLeft, Plus, Trash2, Eye,
   Calendar, User, Percent, DollarSign, Mic, Square,
   Sparkles, Wand2, ChevronDown, ChevronUp, Phone, Wrench, Shield, Loader2,
-  Package, ChevronRight, Zap, Info, AlertCircle, X, Check,
+  Package, ChevronRight, Info, AlertCircle, X, Check,
 } from 'lucide-react';
 import { useInvoices, useClients, useBusinessProfile, useProducts } from '@/lib/hooks';
 import { useAuth } from '@/lib/auth';
@@ -13,6 +13,7 @@ import { calcItemTotal, recalcInvoice } from '@/lib/calc';
 import { generateInvoiceNumber } from '@/lib/voiceParser';
 import { parseInvoiceText } from '@/lib/invoiceParser';
 import { supabase } from '@/lib/supabase';
+import { getSpeechRecognition, type SpeechRecognitionLike } from '@/lib/speech';
 import {
   INDUSTRY_LIST, getIndustryTemplate, detectIndustryFromItems,
   extractIndustryFields, type IndustryId,
@@ -22,7 +23,7 @@ import {
   type SuggestedItem,
 } from '@/lib/tradeAssistant';
 import UpgradeModal from '@/views/UpgradeModal';
-import type { InvoiceItem, InvoiceStatus, ItemType, Product, IndustryTemplateId, DocumentType, RecurringInterval } from '@/lib/types';
+import type { InvoiceItem, InvoiceStatus, ItemType, Product, DocumentType, RecurringInterval } from '@/lib/types';
 import type { View } from '@/App';
 
 const TYPE_META: Record<ItemType, { label: string; color: string; bg: string }> = {
@@ -109,7 +110,7 @@ export default function InvoiceEditor({ invoiceId, documentType: initialDocType,
     (profile?.industry_template as IndustryId) || 'general'
   );
   const [metadata, setMetadata] = useState<Record<string, string>>({});
-  const notesRecognitionRef = useRef<any>(null);
+  const notesRecognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const baseNotesRef = useRef('');
 
   // ── Autosave refs (effects defined after totals/existingInvoice below) ──
@@ -190,8 +191,7 @@ export default function InvoiceEditor({ invoiceId, documentType: initialDocType,
   }, []);
 
   const toggleNotesDictation = useCallback(() => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = getSpeechRecognition();
     if (!SpeechRecognition) return;
 
     if (dictating) {
@@ -207,7 +207,7 @@ export default function InvoiceEditor({ invoiceId, documentType: initialDocType,
 
     baseNotesRef.current = notes;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event) => {
       let finalText = '';
       let interimText = '';
       for (let i = 0; i < event.results.length; i++) {
@@ -231,7 +231,7 @@ export default function InvoiceEditor({ invoiceId, documentType: initialDocType,
     recognition.onerror = () => setDictating(false);
 
     notesRecognitionRef.current = recognition;
-    try { recognition.start(); setDictating(true); } catch {}
+    try { recognition.start(); setDictating(true); } catch { /* mic permission denied or unsupported */ }
   }, [dictating, notes, professionalize]);
 
   const existingInvoice = useMemo(
@@ -641,8 +641,9 @@ export default function InvoiceEditor({ invoiceId, documentType: initialDocType,
       result = await update(existingInvoice.id, invoiceData, itemsData);
     } else {
       result = await create(invoiceData, itemsData);
-      if (!result && (create as any)._lastError) {
-        setSaveError((create as any)._lastError);
+      const lastError = (create as unknown as { _lastError?: string })._lastError;
+      if (!result && lastError) {
+        setSaveError(lastError);
         setSaving(false);
         return;
       }
@@ -660,7 +661,7 @@ export default function InvoiceEditor({ invoiceId, documentType: initialDocType,
       setSavedId(result.id);
       setTimeout(() => onNavigate({ name: 'preview', invoiceId: result.id }), 600);
     }
-  }, [existingInvoice, profile, tier, invoices.length, clientId, clientName, clientEmail, clientPhone, clientAddress, workOrderNumber, technicianName, fees, shipping, deposit, documentType, recurringEnabled, recurringInterval, warranty, status, issueDate, dueDate, totals, taxRate, discount, notes, terms, items, create, update, onNavigate]);
+  }, [existingInvoice, profile, tier, invoices.length, clientId, clientName, clientEmail, clientPhone, clientAddress, workOrderNumber, technicianName, fees, shipping, deposit, documentType, recurringEnabled, recurringInterval, warranty, status, issueDate, dueDate, totals, taxRate, discount, notes, terms, items, industryId, metadata, create, update, onNavigate]);
 
   if (loading) {
     return (

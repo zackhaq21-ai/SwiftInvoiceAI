@@ -208,7 +208,7 @@ Deno.serve(async (req: Request) => {
         current_period_end: periodEnd,
       });
     }
-  } catch (err) {
+  } catch {
     return respond({ error: "An unexpected error occurred. Please try again." }, 500);
   }
 });

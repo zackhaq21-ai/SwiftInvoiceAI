@@ -25,9 +25,16 @@
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: rgb(248 250 252);
+    background:
+      radial-gradient(circle at 10% 0%, rgb(224 231 255 / 0.55), transparent 28rem),
+      radial-gradient(circle at 100% 15%, rgb(207 250 254 / 0.35), transparent 24rem),
+      rgb(248 250 252);
     color: rgb(15 23 42);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    min-height: 100vh;
   }
+
+  button, a, input, textarea, select { @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2; }
 
   ::selection {
     background-color: rgb(17 24 39 / 0.15);
@@ -36,7 +43,20 @@
 
 @layer components {
   .card {
-    @apply bg-white rounded-2xl border border-slate-200/80 shadow-sm;
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl border border-white shadow-sm shadow-slate-900/[0.04];
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  }
+
+  .premium-hero {
+    background: linear-gradient(145deg, #070b16 0%, #111a35 52%, #172554 100%);
+    box-shadow: 0 24px 60px -28px rgb(30 64 175 / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.12);
+  }
+
+  .mobile-dock {
+    background: rgb(255 255 255 / 0.9);
+    border-top: 1px solid rgb(226 232 240 / 0.75);
+    box-shadow: 0 -16px 40px -28px rgb(15 23 42 / 0.55);
+    backdrop-filter: blur(20px) saturate(1.35);
   }
 
   .btn {

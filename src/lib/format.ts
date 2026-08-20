@@ -8,7 +8,12 @@ export function formatCurrency(amount: number, symbol = '$'): string {
 
 export function formatDate(dateStr: string | null): string {
   if (!dateStr) return '—';
-  const date = new Date(dateStr);
+  // Date-only values represent a calendar day, not a UTC timestamp. Parsing
+  // YYYY-MM-DD as UTC can display the previous day in American time zones.
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+  const date = dateOnly
+    ? new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]))
+    : new Date(dateStr);
   if (Number.isNaN(date.getTime())) return '—';
   return date.toLocaleDateString('en-US', {
     month: 'short',
@@ -22,9 +27,15 @@ export function todayISO(): string {
 }
 
 export function addDays(dateStr: string, days: number): string {
-  const date = new Date(dateStr);
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+  const date = dateOnly
+    ? new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]))
+    : new Date(dateStr);
   date.setDate(date.getDate() + days);
-  return date.toISOString().split('T')[0];
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export function statusColor(status: string): { bg: string; text: string; dot: string } {

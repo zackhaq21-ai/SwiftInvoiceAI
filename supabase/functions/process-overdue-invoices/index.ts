@@ -7,6 +7,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
+interface OverdueInvoiceRow {
+  id: string;
+  invoice_number: string;
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
@@ -80,7 +85,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // Mark invoices as overdue
-    const overdueIds = overdueInvoices.map((inv: any) => inv.id);
+    const overdueIds = (overdueInvoices as OverdueInvoiceRow[]).map((inv) => inv.id);
     await supabase
       .from("invoices")
       .update({ status: "overdue" })
@@ -90,7 +95,7 @@ Deno.serve(async (req: Request) => {
       JSON.stringify({
         message: `Processed ${overdueInvoices.length} overdue invoices`,
         sent: overdueInvoices.length,
-        invoiceNumbers: overdueInvoices.map((inv: any) => inv.invoice_number),
+        invoiceNumbers: (overdueInvoices as OverdueInvoiceRow[]).map((inv) => inv.invoice_number),
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );

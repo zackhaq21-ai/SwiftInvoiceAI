@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   RefreshCw, Search, DollarSign, Users, AlertTriangle, XCircle,
-  Loader2, CreditCard, Crown, Shield, ArrowUpRight,
+  Loader2, CreditCard, Crown, Shield,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
-import type { PaidCustomerRow, PaidCustomersResponse } from '@/lib/paidCustomers';
+import type { PaidCustomersResponse } from '@/lib/paidCustomers';
 import { formatCurrency, formatDate } from '@/lib/format';
 
 type StatusFilter = 'all' | 'paid' | 'active' | 'past_due' | 'canceled' | 'incomplete';
