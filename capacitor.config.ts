@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.swiftinvoiceai.app',
-  appName: 'SwiftInvoiceAI',
+  appId: 'com.velzico.app',
+  appName: 'VELZICO',
   webDir: 'dist',
   bundledWebRuntime: false,
   server: {

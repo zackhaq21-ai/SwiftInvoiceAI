@@ -6,14 +6,72 @@
     <link rel="apple-touch-icon" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#4F46E5" />
-    <meta name="description" content="Swift Invoice AI — Invoice faster. Get paid sooner. Voice-to-invoice, professional templates, online payments." />
+
+    <title>VELZICO — AI Invoice Maker for Small Businesses</title>
+    <meta name="description" content="Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO." />
+    <link rel="canonical" href="https://velzico.com/" />
+
+    <!--
+      og:image / twitter:image intentionally still omitted — they need a
+      hosted 1200x630 social share image, which doesn't exist yet. Add
+      "og:image" / "twitter:image" (and switch twitter:card to
+      "summary_large_image") once that asset is designed and hosted.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://velzico.com/" />
+    <meta property="og:site_name" content="VELZICO" />
+    <meta property="og:title" content="VELZICO — AI Invoice Maker for Small Businesses" />
+    <meta property="og:description" content="Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="VELZICO — AI Invoice Maker for Small Businesses" />
+    <meta name="twitter:description" content="Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO." />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <title>Swift Invoice AI — Invoice faster. Get paid sooner.</title>
-    <meta property="og:image" content="https://bolt.new/static/og_default.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "name": "VELZICO",
+            "url": "https://velzico.com/",
+            "description": "AI invoicing and business management for small businesses."
+          },
+          {
+            "@type": "WebSite",
+            "name": "VELZICO",
+            "url": "https://velzico.com/",
+            "publisher": { "@type": "Organization", "name": "VELZICO" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "VELZICO",
+            "url": "https://velzico.com/",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "description": "Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO.",
+            "publisher": { "@type": "Organization", "name": "VELZICO" },
+            "offers": [
+              { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Pro", "price": "14.99", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Business", "price": "29.99", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Enterprise", "price": "99.99", "priceCurrency": "USD" }
+            ]
+          }
+        ]
+      }
+    </script>
+    <!--
+      "operatingSystem" is deliberately "Web" only — VELZICO is not currently
+      published to the App Store or Google Play, so claiming iOS/Android here
+      would be false. Update this the day a native build actually ships.
+      "logo"/"image" fields are still omitted — no hosted brand asset yet.
+      Add them once one exists, then re-validate with Google's Rich Results
+      Test before relying on this data in production.
+    -->
 </head>
   <body>
     <div id="root"></div>

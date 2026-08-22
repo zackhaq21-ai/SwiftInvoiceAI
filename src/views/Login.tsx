@@ -9,7 +9,7 @@ const FACTS = [
   { emoji: '🗣️', stat: '5x faster', detail: 'Voice invoicing is 5x faster than typing on a phone keyboard.' },
   { emoji: '💸', stat: '$300B+', detail: 'Small businesses are collectively owed over $300B in unpaid invoices at any time.' },
   { emoji: '⏱️', stat: '48 hours', detail: 'Businesses that invoice within 24 hours get paid in under 48 hours on average.' },
-  { emoji: '📱', stat: '60 seconds', detail: 'Most SwiftInvoiceAI users send their first invoice within 60 seconds of signing up.' },
+  { emoji: '📱', stat: '60 seconds', detail: 'Most VELZICO users send their first invoice within 60 seconds of signing up.' },
   { emoji: '📊', stat: '120 hrs/year', detail: 'The average small business spends 120 hours a year on manual invoicing. We cut that to under 10.' },
   { emoji: '✅', stat: '2x paid faster', detail: 'Professional-looking invoices get paid 2x faster than plain text or handwritten ones.' },
 ];
@@ -178,7 +178,7 @@ export default function Login() {
               Invoicing that works<br />as fast as you do.
             </h1>
             <p className="text-slate-400 text-lg leading-relaxed max-w-sm">
-              Speak a job, snap a photo, or type — SwiftInvoiceAI turns it into a professional invoice in seconds.
+              Speak a job, snap a photo, or type — VELZICO turns it into a professional invoice in seconds.
             </p>
           </div>
 
@@ -243,7 +243,7 @@ export default function Login() {
             {/* ── LOGO LOCKUP (always visible) ── */}
             <div className="flex flex-col items-center mb-8">
               <LogoMark className="h-16 w-16 shadow-lg shadow-slate-900/20 rounded-2xl mb-3" />
-              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Swift Invoice AI</h1>
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">VELZICO</h1>
               <p className="text-sm text-slate-500 mt-0.5">Invoice faster. Get paid sooner.</p>
             </div>
 

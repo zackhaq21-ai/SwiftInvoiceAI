@@ -1,4 +1,4 @@
-# Swift Invoice AI — Production Readiness Report
+# VELZICO — Production Readiness Report
 
 ## Build Verification
 
@@ -50,7 +50,7 @@
 - Created SVG favicon (crisp at 16x16, works on light/dark backgrounds)
 - Created `Logo.tsx` component with `LogoMark`, `LogoWordmark`, `LogoMarkDark`, `LogoWordmarkDark` variants
 - Applied logo to: login/signup, sidebar, mobile header, loading states
-- Updated page title to "Swift Invoice AI — Invoice faster. Get paid sooner."
+- Updated page title to "VELZICO — Invoice faster. Get paid sooner."
 - Updated meta tags with theme color and description
 - Added footer with legal page links on every authenticated page
 

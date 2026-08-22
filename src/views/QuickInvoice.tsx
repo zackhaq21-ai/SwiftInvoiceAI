@@ -3,10 +3,11 @@ import {
   Check, ChevronRight, ChevronLeft, Plus, Trash2, Mic,
   User, FileText, Eye, Loader2, AlertCircle,
   CheckCircle2, Sparkles, Zap, X, Save,
-  Search, Clock,
+  Search, Clock, Contact,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useClients, useBusinessProfile, useInvoices } from '@/lib/hooks';
+import { hasContactPicker, pickContact } from '@/lib/mobile';
 import { supabase } from '@/lib/supabase';
 import { formatCurrency } from '@/lib/format';
 import { calcItemTotal, round2 } from '@/lib/calc';
@@ -62,6 +63,7 @@ export default function QuickInvoice({ onNavigate, onUpgrade }: QuickInvoiceProp
   const [tradeInput, setTradeInput] = useState('');
   const [tradeSuggestions, setTradeSuggestions] = useState<SuggestedItem[]>([]);
   const [createdInvoice, setCreatedInvoice] = useState<Invoice | null>(null);
+  const [pickingContact, setPickingContact] = useState(false);
   const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const voiceRecognitionRef = useRef<{ stop: () => void } | null>(null);
 
@@ -303,6 +305,22 @@ export default function QuickInvoice({ onNavigate, onUpgrade }: QuickInvoiceProp
     setStep(0);
   }, [profile]);
 
+  const handlePickContact = useCallback(async () => {
+    setPickingContact(true);
+    try {
+      const picked = await pickContact();
+      if (!picked) return;
+      updateDraft({
+        clientId: null,
+        newClientName: picked.name,
+        newClientEmail: picked.email || '',
+        newClientPhone: picked.phone || '',
+      });
+    } finally {
+      setPickingContact(false);
+    }
+  }, [updateDraft]);
+
   const filteredClients = useMemo(() => {
     if (!search.trim()) return clients.slice(0, 20);
     return clients.filter(c =>
@@ -467,6 +485,20 @@ export default function QuickInvoice({ onNavigate, onUpgrade }: QuickInvoiceProp
                 </button>
               ))}
             </div>
+          )}
+
+          {hasContactPicker() && (
+            <button
+              type="button"
+              onClick={handlePickContact}
+              disabled={pickingContact}
+              className="w-full flex items-center justify-center gap-2 p-3 rounded-xl border border-dashed border-slate-300 text-sm font-medium text-slate-600 hover:border-slate-400 hover:bg-slate-50 active:scale-[0.99] transition-all min-touch disabled:opacity-60"
+            >
+              {pickingContact
+                ? <Loader2 className="w-4 h-4 animate-spin" />
+                : <Contact className="w-4 h-4" />}
+              {pickingContact ? 'Opening contacts…' : 'Import from contacts'}
+            </button>
           )}
 
           {/* Divider */}

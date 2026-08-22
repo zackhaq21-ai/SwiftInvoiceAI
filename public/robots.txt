@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /$
+Allow: /privacy
+Allow: /terms
+Allow: /refund
+Allow: /contact
+Disallow: /dashboard
+Disallow: /invoices
+Disallow: /quick-invoice
+Disallow: /estimates
+Disallow: /voice
+Disallow: /clients
+Disallow: /products
+Disallow: /expenses
+Disallow: /reports
+Disallow: /settings
+Disallow: /paid-customers
+Disallow: /team
+Disallow: /pay/
+
+# Public invoice/estimate payment links (/pay/:id) are meant to be shared
+# directly with one customer, not discovered via search — disallowed above
+# even though the ID itself is unguessable, so nothing ever gets crawled
+# or cached for a link a customer forwards or a business posts publicly.
+
+Sitemap: https://velzico.com/sitemap.xml
