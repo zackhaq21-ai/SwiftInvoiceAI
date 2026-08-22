@@ -15,8 +15,8 @@ const PAGES: Record<string, { title: string; icon: typeof Shield; lastUpdated: s
       {
         heading: 'Overview',
         body: [
-          'ThatInvoice ("we", "us", "our") is an invoicing application that helps businesses create, send, and manage invoices, estimates, and payments. This Privacy Policy explains how we collect, use, and protect your information.',
-          'By using ThatInvoice, you agree to the practices described in this policy.',
+          'VELZICO ("we", "us", "our") is an invoicing application that helps businesses create, send, and manage invoices, estimates, and payments. This Privacy Policy explains how we collect, use, and protect your information.',
+          'By using VELZICO, you agree to the practices described in this policy.',
         ],
       },
       {
@@ -87,7 +87,7 @@ const PAGES: Record<string, { title: string; icon: typeof Shield; lastUpdated: s
       {
         heading: 'Acceptance of Terms',
         body: [
-          'By creating an account or using ThatInvoice, you agree to these Terms of Service. If you do not agree, you may not use the service.',
+          'By creating an account or using VELZICO, you agree to these Terms of Service. If you do not agree, you may not use the service.',
           'You must be at least 18 years old and have the legal authority to bind your business to these terms.',
         ],
       },
@@ -101,14 +101,14 @@ const PAGES: Record<string, { title: string; icon: typeof Shield; lastUpdated: s
       {
         heading: 'Acceptable Use',
         body: [
-          'You agree to use ThatInvoice only for lawful business purposes. You may not use the service to create fraudulent invoices, misrepresent goods or services, or violate any applicable laws.',
+          'You agree to use VELZICO only for lawful business purposes. You may not use the service to create fraudulent invoices, misrepresent goods or services, or violate any applicable laws.',
           'You retain ownership of all invoice and client data you create. You are responsible for the accuracy and legality of your invoices.',
         ],
       },
       {
         heading: 'Subscription Plans and Billing',
         body: [
-          'ThatInvoice offers Free, Pro ($14.99/mo), Business ($29.99/mo), and Enterprise ($99.99/mo) plans. Prices are in USD and billed monthly through Stripe.',
+          'VELZICO offers Free, Pro ($14.99/mo), Business ($29.99/mo), and Enterprise ($99.99/mo) plans. Prices are in USD and billed monthly through Stripe.',
           'You can upgrade, downgrade, or cancel your subscription at any time. Changes take effect at the next billing cycle.',
           'Failed payments may result in suspended service until payment is resolved. You will be notified by email before any suspension.',
         ],
@@ -116,14 +116,14 @@ const PAGES: Record<string, { title: string; icon: typeof Shield; lastUpdated: s
       {
         heading: 'Intellectual Property',
         body: [
-          'ThatInvoice and its software, design, and branding are the property of their respective owners. You may not copy, modify, or redistribute the platform itself.',
+          'VELZICO and its software, design, and branding are the property of their respective owners. You may not copy, modify, or redistribute the platform itself.',
           'Invoices, estimates, and documents you create belong to you and your business.',
         ],
       },
       {
         heading: 'Disclaimers and Limitation of Liability',
         body: [
-          'ThatInvoice is provided "as is" without warranties of any kind. We do not guarantee that the service will be error-free, uninterrupted, or that invoices generated through AI features will be legally compliant in your jurisdiction.',
+          'VELZICO is provided "as is" without warranties of any kind. We do not guarantee that the service will be error-free, uninterrupted, or that invoices generated through AI features will be legally compliant in your jurisdiction.',
           'You should review all AI-generated content before sending invoices to clients.',
           'Our liability is limited to the amount you have paid in the preceding 12 months.',
         ],
@@ -150,7 +150,7 @@ const PAGES: Record<string, { title: string; icon: typeof Shield; lastUpdated: s
       {
         heading: 'Cancellation',
         body: [
-          'You can cancel your ThatInvoice subscription at any time from your account settings or by contacting support.',
+          'You can cancel your VELZICO subscription at any time from your account settings or by contacting support.',
           'Cancellation takes effect at the end of your current billing period. You will retain access to paid features until then.',
           'No cancellation fees apply.',
         ],
@@ -287,7 +287,7 @@ export default function Legal({ page, onNavigate }: LegalProps) {
             ))}
           </div>
           <p className="text-xs text-slate-400 mt-6">
-            &copy; {new Date().getFullYear()} ThatInvoice. All rights reserved.
+            &copy; {new Date().getFullYear()} VELZICO. All rights reserved.
           </p>
         </div>
       </div>

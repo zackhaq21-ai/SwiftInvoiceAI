@@ -160,7 +160,7 @@ describe('friendlyError — user-friendly messages', () => {
 
 describe('buildEmailRedirectTo — verification link target', () => {
   it('appends /dashboard to the given origin', () => {
-    expect(buildEmailRedirectTo('https://thatinvoice.com')).toBe('https://thatinvoice.com/dashboard');
+    expect(buildEmailRedirectTo('https://example.com')).toBe('https://example.com/dashboard');
   });
 
   it('works with localhost dev origin', () => {
@@ -168,7 +168,7 @@ describe('buildEmailRedirectTo — verification link target', () => {
   });
 
   it('always targets /dashboard (required by flow spec)', () => {
-    const url = buildEmailRedirectTo('https://thatinvoice.com');
+    const url = buildEmailRedirectTo('https://example.com');
     expect(url.endsWith('/dashboard')).toBe(true);
   });
 });

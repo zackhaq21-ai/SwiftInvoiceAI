@@ -54,7 +54,10 @@ export async function getWebBaseUrl(): Promise<string> {
   } catch { /* preferences plugin not available */ }
   const envUrl = import.meta.env.VITE_APP_URL as string | undefined;
   if (envUrl) return envUrl;
-  return 'https://thatinvoice.app';
+  // Last resort: never fabricate a production domain. On native this is only
+  // reached if VITE_APP_URL wasn't set at build time — falling back to the
+  // native webview's own origin is always valid, even if not ideal.
+  return window.location.origin;
 }
 
 export async function setWebBaseUrl(url: string): Promise<void> {

@@ -1,8 +1,8 @@
-# ThatInvoice
+# VELZICO
 
 Invoice faster. Get paid sooner.
 
-ThatInvoice is an invoicing and estimates platform for freelancers, tradespeople, and small businesses. It includes customer management, voice-assisted invoice creation, payments, expenses, reporting, team collaboration, and subscription billing.
+VELZICO is an invoicing and estimates platform for freelancers, tradespeople, and small businesses. It includes customer management, voice-assisted invoice creation, payments, expenses, reporting, team collaboration, and subscription billing.
 
 ## Run locally
 

@@ -1,8 +1,8 @@
-# Deployment Guide — ThatInvoice
+# Deployment Guide — VELZICO
 
 ## Overview
 
-This document describes the deployment workflow for **thatinvoiceai.com** using Bolt's built-in hosting.
+This document describes the deployment workflow for **<your-velzico-production-domain>** using Bolt's built-in hosting.
 
 ### Important Limitation
 
@@ -40,7 +40,7 @@ The script exits with code `1` on any failure, making it suitable for CI pipelin
 Once all gates pass:
 
 1. Open the **Publish** menu in Bolt (top-right of the editor).
-2. Click **Update** to push your changes live to thatinvoiceai.com.
+2. Click **Update** to push your changes live to <your-velzico-production-domain>.
 3. Wait for the deployment to complete (Bolt shows a confirmation).
 
 > **Always use the Publish or Update button** in the Publish menu — these don't consume tokens. Prompting Bolt to publish via chat consumes tokens.
@@ -62,7 +62,7 @@ This script checks:
 
 To check a different URL:
 ```bash
-bash scripts/post-deploy-health-check.sh https://thatinvoiceai.com
+bash scripts/post-deploy-health-check.sh https://<your-velzico-production-domain>
 ```
 
 ---

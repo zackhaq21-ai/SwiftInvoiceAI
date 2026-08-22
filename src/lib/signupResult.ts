@@ -58,7 +58,7 @@ export const SUCCESS_MESSAGE =
  * Build the trusted email-redirect URL for the Supabase email-confirmation link.
  * Uses the current app origin plus /dashboard so the verification callback
  * returns to the app and lands on the Dashboard after the session is set.
- * For production this resolves to https://thatinvoice.com/dashboard.
+ * For production this resolves to https://<your-velzico-production-domain>/dashboard.
  */
 export function buildEmailRedirectTo(origin: string): string {
   return `${origin}/dashboard`;
