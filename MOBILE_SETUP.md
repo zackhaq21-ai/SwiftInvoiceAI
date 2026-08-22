@@ -147,14 +147,14 @@ The app uses a **deployed web URL** as the redirect target. Set it in two ways:
 ### Option A: Environment variable
 Add to `.env`:
 ```
-VITE_APP_URL=https://your-deployed-domain.com
+VITE_APP_URL=https://velzico.com
 ```
 
 ### Option B: Runtime (persisted on device)
 The app will prompt you to set this, or you can call it from a settings screen:
 ```ts
 import { setWebBaseUrl } from '@/lib/mobile';
-await setWebBaseUrl('https://your-deployed-domain.com');
+await setWebBaseUrl('https://velzico.com');
 ```
 
 You need a deployed web version of VELZICO (e.g., on Vercel, Netlify, or your own domain). After Stripe redirects there, the web version can deep-link back into the app if you set up a custom URL scheme.

@@ -9,15 +9,16 @@
 
     <title>VELZICO — AI Invoice Maker for Small Businesses</title>
     <meta name="description" content="Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO." />
+    <link rel="canonical" href="https://velzico.com/" />
 
     <!--
-      canonical / og:url / og:image / twitter:image intentionally omitted —
-      they need the real production domain and a hosted 1200x630 social
-      share image, neither of which exist yet. Do not fill these with a
-      guessed domain; add them once both are confirmed. See project README
-      for the exact tags to add at that point.
+      og:image / twitter:image intentionally still omitted — they need a
+      hosted 1200x630 social share image, which doesn't exist yet. Add
+      "og:image" / "twitter:image" (and switch twitter:card to
+      "summary_large_image") once that asset is designed and hosted.
     -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://velzico.com/" />
     <meta property="og:site_name" content="VELZICO" />
     <meta property="og:title" content="VELZICO — AI Invoice Maker for Small Businesses" />
     <meta property="og:description" content="Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO." />
@@ -36,16 +37,19 @@
           {
             "@type": "Organization",
             "name": "VELZICO",
+            "url": "https://velzico.com/",
             "description": "AI invoicing and business management for small businesses."
           },
           {
             "@type": "WebSite",
             "name": "VELZICO",
+            "url": "https://velzico.com/",
             "publisher": { "@type": "Organization", "name": "VELZICO" }
           },
           {
             "@type": "SoftwareApplication",
             "name": "VELZICO",
+            "url": "https://velzico.com/",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "description": "Create professional invoices and estimates, manage customers, accept payments, track expenses, and run your business faster with VELZICO.",
@@ -64,9 +68,8 @@
       "operatingSystem" is deliberately "Web" only — VELZICO is not currently
       published to the App Store or Google Play, so claiming iOS/Android here
       would be false. Update this the day a native build actually ships.
-      "url"/"logo"/"image" fields are omitted from every entry above for the
-      same reason as the meta tags: no confirmed domain or hosted asset yet.
-      Add them once both exist, then re-validate with Google's Rich Results
+      "logo"/"image" fields are still omitted — no hosted brand asset yet.
+      Add them once one exists, then re-validate with Google's Rich Results
       Test before relying on this data in production.
     -->
 </head>

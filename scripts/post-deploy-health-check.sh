@@ -10,10 +10,10 @@ set -euo pipefail
 # Usage: npm run health-check
 #        bash scripts/post-deploy-health-check.sh [URL]
 #
-# Defaults to https://<your-velzico-production-domain>
+# Defaults to https://velzico.com
 # ──────────────────────────────────────────────────────────────────────────────
 
-BASE_URL="${1:-https://<your-velzico-production-domain>}"
+BASE_URL="${1:-https://velzico.com}"
 # Remove trailing slash for consistent URL construction
 BASE_URL="${BASE_URL%/}"
 

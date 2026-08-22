@@ -23,5 +23,4 @@ Disallow: /pay/
 # even though the ID itself is unguessable, so nothing ever gets crawled
 # or cached for a link a customer forwards or a business posts publicly.
 
-# Add once the production domain is live:
-# Sitemap: https://<your-velzico-production-domain>/sitemap.xml
+Sitemap: https://velzico.com/sitemap.xml

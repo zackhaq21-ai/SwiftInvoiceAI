@@ -360,7 +360,7 @@ Deno.serve(async (req: Request) => {
         }
       }
 
-      const origin = req.headers.get("origin") ?? "https://app.velzico.app";
+      const origin = req.headers.get("origin") ?? "https://velzico.com";
       const params = new URLSearchParams({
         mode: "subscription",
         customer: customerId!,

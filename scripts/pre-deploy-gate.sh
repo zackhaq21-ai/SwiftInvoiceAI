@@ -64,6 +64,6 @@ if [ "$GATES_FAILED" -gt 0 ]; then
 fi
 
 echo -e "\n${GREEN}✓ ALL GATES PASSED — safe to publish.${NC}"
-echo -e "${YELLOW}  Next: click 'Update' in Bolt's Publish menu to deploy to <your-velzico-production-domain>${NC}"
+echo -e "${YELLOW}  Next: click 'Update' in Bolt's Publish menu to deploy to velzico.com${NC}"
 echo -e "${YELLOW}  Then run: npm run health-check${NC}"
 exit 0
